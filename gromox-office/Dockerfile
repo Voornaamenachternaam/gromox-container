@@ -5,7 +5,9 @@ RUN zypper --non-interactive refresh && zypper --non-interactive install -y ipta
 ARG GROMMUNIO_REPO=community/openSUSE_Leap_15.5
 RUN curl -fsSL https://download.grommunio.com/RPM-GPG-KEY-grommunio -o /tmp/gr.key && rpm --import /tmp/gr.key && zypper --non-interactive ar -C https://download.grommunio.com/${GROMMUNIO_REPO} grommunio && zypper --non-interactive --gpg-auto-import-keys refresh grommunio
 
-RUN zypper --non-interactive install -y vim mariadb-client gromox grommunio-office python3-py3dns
+RUN zypper --non-interactive ar https://download.opensuse.org/repositories/devel:/languages:/python/openSUSE_Leap_15.5/ python-python && zypper --non-interactive ref
+
+RUN zypper --non-interactive install -y vim mariadb-client python3-dns gromox grommunio-office python3-certbot python3-certbot-nginx
 
 COPY gromox-office/entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
