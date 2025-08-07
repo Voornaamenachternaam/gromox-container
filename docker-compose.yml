@@ -2,7 +2,7 @@ version: '3'
 services:
 
   gromox-db:
-    image: mariadb:10
+    image: mariadb:latest
     container_name: gromox-db
     environment:
       MARIADB_ROOT_PASSWORD: Lu3s3WmFxXghtLwJnuqN
@@ -23,7 +23,7 @@ services:
           - gromox-db
 
   chat-db:
-    image: mariadb:10
+    image: mariadb:latest
     container_name: chat-db
     environment:
       MARIADB_ROOT_PASSWORD: Lu3s3WmFxXghtLwJnuqN
@@ -44,7 +44,7 @@ services:
           - chat-db
     
   files-db:
-    image: mariadb:10
+    image: mariadb:latest
     container_name: files-db
     environment:
       MARIADB_ROOT_PASSWORD: Lu3s3WmFxXghtLwJnuqN
@@ -65,7 +65,7 @@ services:
           - files-db
 
   office-db:
-    image: mariadb:10
+    image: mariadb:latest
     container_name: office-db
     environment:
       MARIADB_ROOT_PASSWORD: Lu3s3WmFxXghtLwJnuqN
@@ -86,7 +86,7 @@ services:
           - office-db
 
   archive-db:
-    image: mariadb:10
+    image: mariadb:latest
     container_name: archive-db
     environment:
       MARIADB_ROOT_PASSWORD: Lu3s3WmFxXghtLwJnuqN
