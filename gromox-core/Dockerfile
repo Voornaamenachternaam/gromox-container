@@ -22,14 +22,14 @@ ARG GROMMUNIO_REPO=openSUSE_Leap_15.5
 # Systemd installation
 #
 RUN zypper -n install -y \
-        iptables   \
-        iproute2    \
-        kmod       \
-        curl    \
+        iptables \
+        iproute2 \
+        kmod \
+        curl \
         patterns-base-apparmor \ 
         patterns-base-base \ 
-        procps  \
-        sudo       \
+        procps \
+        sudo \
         systemd 
 
 RUN	curl https://download.grommunio.com/RPM-GPG-KEY-grommunio > gr.key && \
@@ -38,7 +38,7 @@ RUN	curl https://download.grommunio.com/RPM-GPG-KEY-grommunio > gr.key && \
 	  zypper --gpg-auto-import-keys ref && \
 	  zypper -n refresh grommunio
 
-RUN    zypper --non-interactive install -y vim mysql        \
+RUN zypper --non-interactive install -y vim mysql \
 	gromox grommunio-admin-api grommunio-admin-web grommunio-antispam \
 	grommunio-common grommunio-web grommunio-sync grommunio-dav postfix postfix-mysql \  
 	grommunio-chat firewalld cyrus-sasl-saslauthd cyrus-sasl-plain jq \
@@ -47,20 +47,20 @@ RUN    zypper --non-interactive install -y vim mysql        \
 	#grommunio-archive sphinx  docker openssh-server grommunio-office rabbitmq-server \ 
 
     # Unmask services
-RUN    systemctl unmask                                                  \
-        systemd-remount-fs.service                                    \
-        dev-hugepages.mount                                           \
-        sys-fs-fuse-connections.mount                                 \
-        systemd-logind.service                                        \
-        getty.target                                                  \
-        console-getty.service 
+RUN systemctl unmask \
+    systemd-remount-fs.service  \
+    dev-hugepages.mount \
+    sys-fs-fuse-connections.mount \
+    systemd-logind.service \
+    getty.target \
+    console-getty.service
     # Prevent journald from reading kernel messages from /dev/kmsg
 
-RUN    echo "ReadKMsg=no" >> /etc/systemd/journald.conf                                                             
+RUN echo "ReadKMsg=no" >> /etc/systemd/journald.conf                                                             
                                                                 
     # Create default user if needed
     # useradd --create-home --shell /bin/bash your_username -G wheel && echo "your_username:your_password" | chpasswd
-RUN    groupadd 'wheel' &&                         \
+RUN groupadd 'wheel' && \
     useradd -m -s /bin/bash -G wheel admin && echo "admin:admin" | chpasswd
 
 COPY gromox-core/scripts /home/scripts
