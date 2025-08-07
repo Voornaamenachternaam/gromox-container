@@ -21,41 +21,20 @@ ARG GROMMUNIO_REPO=openSUSE_Leap_15.5
 #
 # Systemd installation
 #
-RUN zypper -n install -y \
-        iptables   \
-        iproute2    \
-        kmod       \
-        curl    \
-        patterns-base-apparmor \ 
-        patterns-base-base \ 
-        procps  \
-        sudo       \
-        systemd 
+RUN zypper -n install -y iptables iproute2 kmod curl patterns-base-apparmor patterns-base-base procps sudo systemd 
 
-RUN	curl https://download.grommunio.com/RPM-GPG-KEY-grommunio > gr.key && \
-	  rpm --import gr.key && \
-	  zypper --non-interactive --quiet ar -C https://download.grommunio.com/community/${GROMMUNIO_REPO} grommunio && \
-	  zypper --gpg-auto-import-keys ref && \
-	  zypper -n refresh grommunio
+RUN	curl https://download.grommunio.com/RPM-GPG-KEY-grommunio > gr.key && rpm --import gr.key && zypper --non-interactive --quiet ar -C https://download.grommunio.com/community/${GROMMUNIO_REPO} grommunio && zypper --gpg-auto-import-keys ref && zypper -n refresh grommunio
 
-RUN    zypper --non-interactive install -y vim mysql         \
-       php8-mysql php8-cli php8-openssl php-fpm grommunio-archive sphinx nginx jq firewalld cyrus-sasl-saslauthd cyrus-sasl-plain grommunio-common 
+RUN zypper --non-interactive install -y vim mysql php8-mysql php8-cli php8-openssl php-fpm grommunio-archive sphinx nginx jq firewalld cyrus-sasl-saslauthd cyrus-sasl-plain grommunio-common 
 
     # Unmask services
-RUN    systemctl unmask                                                  \
-        systemd-remount-fs.service                                    \
-        dev-hugepages.mount                                           \
-        sys-fs-fuse-connections.mount                                 \
-        systemd-logind.service                                        \
-        getty.target                                                  \
-        console-getty.service 
-    # Prevent journald from reading kernel messages from /dev/kmsg
+RUN systemctl unmask systemd-remount-fs.service dev-hugepages.mount sys-fs-fuse-connections.mount systemd-logind.service getty.target console-getty.service 
+		# Prevent journald from reading kernel messages from /dev/kmsg
 
-RUN    echo "ReadKMsg=no" >> /etc/systemd/journald.conf                                                             
+RUN echo "ReadKMsg=no" >> /etc/systemd/journald.conf                                                             
                                                                 
     # Create default user if needed
-RUN    groupadd 'wheel' &&                         \
-    useradd -m -s /bin/bash -G wheel admin && echo "admin:admin" | chpasswd
+RUN groupadd 'wheel' && useradd -m -s /bin/bash -G wheel admin && echo "admin:admin" | chpasswd
 
 COPY gromox-archive/scripts /home/scripts
 COPY gromox-archive/common /home/common
