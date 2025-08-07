@@ -2,7 +2,7 @@ name: Build and Push Gromox Images
 
 on:
   push:
-    branches: [ main ]
+    branches: [master]
     paths:
       - '**/Dockerfile'
       - 'docker-compose.yml'
