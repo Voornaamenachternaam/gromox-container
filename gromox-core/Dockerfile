@@ -1,15 +1,8 @@
 FROM opensuse/leap:15.5
-
-RUN zypper --non-interactive refresh && zypper --non-interactive install -y iptables iproute2 kmod curl patterns-base-apparmor patterns-base-base procps sudo systemd
-
-ARG GROMMUNIO_REPO=community/openSUSE_Leap_15.5
-RUN curl -fsSL https://download.grommunio.com/RPM-GPG-KEY-grommunio -o /tmp/gr.key && rpm --import /tmp/gr.key && zypper --non-interactive ar -C https://download.grommunio.com/${GROMMUNIO_REPO} grommunio && zypper --non-interactive --gpg-auto-import-keys refresh grommunio
-
-RUN zypper --non-interactive ar https://download.opensuse.org/repositories/devel:/languages:/python/openSUSE_Leap_15.5/ python-python && zypper --non-interactive ref
-
-RUN zypper --non-interactive install -y vim mariadb-client python3-dns gromox grommunio-admin-api grommunio-admin-web grommunio-antispam grommunio-common grommunio-web grommunio-sync grommunio-dav postfix postfix-mysql grommunio-chat firewalld cyrus-sasl-saslauthd cyrus-sasl-plain jq python3-certbot python3-certbot-nginx
-
+RUN zypper --non-interactive refresh && zypper --non-interactive install -y iptables iproute2 kmod curl patterns-base-apparmor patterns-base-base procps sudo systemd python3-pip vim mariadb-client gromox grommunio-antispam grommunio-common grommunio-web grommunio-sync grommunio-dav postfix postfix-mysql grommunio-chat firewalld cyrus-sasl-saslauthd cyrus-sasl-plain jq python3-certbot python3-certbot-nginx
+RUN pip3 install dnspython
+RUN curl -fsSL https://download.grommunio.com/RPMS/grommunio-admin-api-1.17.10.5947394-lp155.11.1.noarch.rpm -o /tmp/admin-api.rpm && rpm -Uvh --nodeps /tmp/admin-api.rpm && rm /tmp/admin-api.rpm
+RUN curl -fsSL https://download.grommunio.com/RPMS/grommunio-admin-web-1.17.10.5947394-lp155.11.1.noarch.rpm -o /tmp/admin-web.rpm && rpm -Uvh --nodeps /tmp/admin-web.rpm && rm /tmp/admin-web.rpm
 COPY gromox-core/entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
-
 ENTRYPOINT ["/entrypoint.sh"]
